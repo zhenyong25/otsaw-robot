@@ -4,7 +4,7 @@ export default function Home() {
   return (
     <div className='h-screen flex justify-center items-center '>
       <div className='bg-gray-100 w-1/2 mx-auto rounded-md'>
-        <form className='w-1/2 mx-auto my-7'>
+        <form className='w-1/2 mx-auto my-2'>
           <div className='font-bold text-center text-lg'>OTSAW Robot</div>
           <div className='my-2'>Email</div>
           <input type='email' className='rounded-full w-full'></input>
@@ -21,4 +21,5 @@ export default function Home() {
       </div>
     </div>
   )
+    
 }
