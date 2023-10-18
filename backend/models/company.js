@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+const mongoose = require('mongoose')
 
 // Company Schema
 const CompanySchema = new mongoose.Schema({
@@ -6,4 +6,4 @@ const CompanySchema = new mongoose.Schema({
     address: { type: String, required: true, select: false}, 
 })
 
-export const CompanyModal = mongoose.model("Company", CompanySchema)
+module.exports = mongoose.model("Company", CompanySchema)

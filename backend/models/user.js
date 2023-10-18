@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+const mongoose = require('mongoose')
 
 // User Schema
 const UserSchema = new mongoose.Schema({
@@ -7,5 +7,5 @@ const UserSchema = new mongoose.Schema({
     isAdmin: { type: Boolean, required: true, default: false}
 })
 
-export const UserModel = mongoose.model("User", UserSchema)
+module.exports = mongoose.model("User", UserSchema)
 

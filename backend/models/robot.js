@@ -1,12 +1,12 @@
-import mongoose from "mongoose";
+const mongoose = require('mongoose')
 
 // Robot Schema
 const RobotSchema = new mongoose.Schema({
     name: { type: String, required: true},
     model: { type: String, required: true},
-    manufacturingDt: { type: Date, required: true}, 
+    manufacturingDt: { type: String, required: true}, 
     status: { type: String, required: true}, 
     currentLoc: { type: String, required: true}
 })
 
-export const RobotModal = mongoose.model("Company", RobotSchema)
+module.exports = mongoose.model("Robot", RobotSchema)

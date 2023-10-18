@@ -1,18 +1,73 @@
 "use client"
 
+import { Robots } from 'next/dist/lib/metadata/types/metadata-types';
 import React from 'react'
 import {useState, useEffect} from 'react'
 
 const Robot = () => {
 
-  const [robots, setRobot] = useState(false); 
+  const [robots, setRobots] = useState<any>(null); 
   const [edit, setEdit] = useState(false); 
   const [modal, setModal] = useState(false); 
   const [isClient, setIsClient] = useState(false)
+
+  const [name, setName] = useState<string>('')
+  const [model, setModel] = useState<string>('')
+  const [manufacturingDt, setmanufacturingDt] = useState<string>('')
+  const [status, setStatus] = useState<string>('')
+  const [currentLoc, setcurrentLoc] = useState<string>('')
+  const [error, setError] = useState(null)
  
   useEffect(() => {
+
     setIsClient(true)
+
+    const fetchRobots = async() => {
+      const response = await fetch('http://localhost:8080/robot')
+      const json = await response.json()
+
+      console.log("Hello1")
+
+      if (response.ok){
+          setRobots(json)
+      }
+
+    // Call the function 
+    fetchRobots()
+   }
   }, [])
+
+  const handleSubmit = async(e: any) => {
+    e.preventDefault()
+
+    console.log(model)
+
+    const robot = {name, model, manufacturingDt, status, currentLoc}
+
+    console.log(JSON.stringify(robot))
+  
+    const response = await fetch('http://localhost:8080/robot', {
+      mode: 'no-cors', 
+      method: 'POST',
+      body: JSON.stringify(robot),
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+
+    if (response.ok) {
+      const json = await response.json()
+      setError(null)
+      setName('')
+      setModel('')
+      setmanufacturingDt('')
+      setStatus('')
+      setcurrentLoc('')
+      console.log('new workout added:', json)
+    } else {
+      console.error('Error response:', response.status, response.statusText);
+    }
+  }
 
 
   return (
@@ -35,14 +90,33 @@ const Robot = () => {
                         <th>Company ID</th>
                         <th>Actions</th>
                     </tr>
-                    <tr>
+
+                    {robots && robots.map((robot:any)=>(
+                    <tr key={robot.id}>
+                        <td>{robot.id}</td>
+                        <td>{robot.name}</td>
+                        <td>{robot.year}</td>
+                        <td>{robot.manufacturingDt}</td>
+                        <td>{robot.status}</td>
+                        <td>{robot.currentLoc}</td>
                         <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
+                        <td>
+                            <div className=''>
+                                <button onClick={()=>setEdit(true)} className='p-2 m-2 rounded-md bg-blue-500 text-white text-sm'>Edit</button>
+                                <button className='p-2 mt-2 rounded-md bg-red-600 text-white text-sm'>Delete</button>
+                            </div>
+                        </td>
+                    </tr>
+                    ))}
+
+                    <tr className='text-center border'>
+                        <td>1</td>
+                        <td>TSC90417</td>
+                        <td>Transcar</td>
+                        <td>Manufacturing</td>
+                        <td>Active</td>
+                        <td>Ang Mo Kio</td>
+                        <td>2</td>
                         <td>
                             <div className=''>
                                 <button onClick={()=>setEdit(true)} className='p-2 m-2 rounded-md bg-blue-500 text-white text-sm'>Edit</button>
@@ -86,7 +160,7 @@ const Robot = () => {
             </button>
             
             {/* ADD ROBOT FORM  */}
-            <form className='w-5/6 mx-auto'>
+            <form className='w-5/6 mx-auto' onSubmit={handleSubmit}>
                   <div className='text-center text-lg font-bold py-2'>
                     Robots
                   </div>
@@ -95,10 +169,11 @@ const Robot = () => {
                     <div className="flex flex-col space-y-3 ">
                       <div className='font-semibold'>Name</div>
                       <input
-                        id="name"
                         type="text"
                         placeholder=""
                         className="border"
+                        onChange={(e) => setName(e.target.value)} 
+                        value={name}
                       />
                     </div>
                   </div>
@@ -106,15 +181,16 @@ const Robot = () => {
                   <div className="grid w-full items-center gap-2 my-2">
                     <div className="flex flex-col space-y-3">
                       <div className='font-semibold'>Model</div>
-                      <select className="border">
-                        <option>TRANSCAR</option>
-                        <option>CAMELLO</option>
-                        <option>O-R3</option>
-                        <option>ASR</option>
-                        <option>ROSIE</option>
-                        <option>O-RX</option>
-                        <option>TREX</option>
-                        <option>AIRGUARD</option>
+                      <select className="border"
+                        value={model}>
+                        <option value="TRANSCAR">TRANSCAR</option>
+                        <option value="CAMELLO">CAMELLO</option>
+                        <option value="O-R3">O-R3</option>
+                        <option value="ASR">ASR</option>
+                        <option value="ROSIE">ROSIE</option>
+                        <option value="O-RX">O-RX</option>
+                        <option value="TREX">TREX</option>
+                        <option value="AIRGUARD">AIRGUARD</option>
                       </select>
                     </div>
                   </div>
@@ -122,14 +198,20 @@ const Robot = () => {
                   <div className="grid w-full items-center gap-2 my-2">
                     <div className="flex flex-col space-y-3">
                       <div className='font-semibold'>Manufacturing Date</div>
-                      <input id="manufacture-date" type="date" className="border" value="" />
+                      <input 
+                      type="date" 
+                      className="border" 
+                      onChange={(e) => setmanufacturingDt(e.target.value)} 
+                        value={manufacturingDt}  />
                     </div>
                   </div>
 
                   <div className="grid w-full items-center gap-2 my-2">
                     <div className="flex flex-col space-y-3">
                       <div className='font-semibold'>Status</div>
-                      <select className="border" >
+                      <select className="border" 
+                      onChange={(e)=>setStatus(e.target.value)}
+                      value={status}>
                         <option>Active</option>
                         <option>Inactive</option>
                         <option>Maintenance</option>
@@ -140,20 +222,23 @@ const Robot = () => {
                   <div className="grid w-full items-center gap-2 my-2">
                     <div className="flex flex-col space-y-3">
                       <div className='font-semibold'>Current Location</div>
-                      <input id="password" placeholder="" className="border" />
+                      <input 
+                      placeholder="" 
+                      className="border"
+                      onChange={(e) => setcurrentLoc(e.target.value)} 
+                        value={currentLoc} />
                     </div>
                   </div>
 
                   <div className="grid w-full items-center gap-2 my-2">
                     <div className="flex flex-col space-y-3">
                       <div className='font-semibold'>Company ID</div>
-                      <input id="password" placeholder="" className="border" />
+                      <input placeholder="" className="border" />
                     </div>
                   </div>
                       
                   <div className="flex justify-center">
                     <button
-                      type="submit"
                       className="inset-x-1/2 justify-center my-4 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                     >
                       Add Robot
@@ -190,7 +275,7 @@ const Robot = () => {
               <span className="sr-only">Close modal</span>
             </button>
             
-            {/* ADD ROBOT FORM  */}
+            {/* EDIT ROBOT FORM  */}
             <form className='w-5/6 mx-auto'>
                   <div className='text-center text-lg font-bold py-2'>
                     Robots
@@ -204,6 +289,8 @@ const Robot = () => {
                         type="text"
                         placeholder=""
                         className="border"
+                        onChange={(e) => setName(e.target.value)} 
+                        value={name}
                       />
                     </div>
                   </div>
@@ -211,7 +298,9 @@ const Robot = () => {
                   <div className="grid w-full items-center gap-2 my-2">
                     <div className="flex flex-col space-y-3">
                       <div className='font-semibold'>Model</div>
-                      <select className="border">
+                      <select className="border" 
+                        onChange={(e)=>setModel(e.target.value)}
+                        value={model}>
                         <option>TRANSCAR</option>
                         <option>CAMELLO</option>
                         <option>O-R3</option>
@@ -227,14 +316,21 @@ const Robot = () => {
                   <div className="grid w-full items-center gap-2 my-2">
                     <div className="flex flex-col space-y-3">
                       <div className='font-semibold'>Manufacturing Date</div>
-                      <input id="manufacture-date" type="date" className="border" value="" />
+                      <input 
+                      id="manufacture-date" 
+                      type="date" 
+                      className="border" 
+                      onChange={(e) => setmanufacturingDt(e.target.value)} 
+                        value={manufacturingDt} />
                     </div>
                   </div>
 
                   <div className="grid w-full items-center gap-2 my-2">
                     <div className="flex flex-col space-y-3">
                       <div className='font-semibold'>Status</div>
-                      <select className="border" >
+                      <select className="border" 
+                       onChange={(e)=>setStatus(e.target.value)}
+                       value={status}>
                         <option>Active</option>
                         <option>Inactive</option>
                         <option>Maintenance</option>
@@ -245,7 +341,12 @@ const Robot = () => {
                   <div className="grid w-full items-center gap-2 my-2">
                     <div className="flex flex-col space-y-3">
                       <div className='font-semibold'>Current Location</div>
-                      <input id="password" placeholder="" className="border" />
+                      <input 
+                      id="password" 
+                      placeholder="" 
+                      className="border"
+                      onChange={(e) => setcurrentLoc(e.target.value)} 
+                        value={currentLoc} />
                     </div>
                   </div>
 

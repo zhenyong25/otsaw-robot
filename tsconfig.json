@@ -22,6 +22,6 @@
       "@/*": ["./*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "backend/models/user.js", "backend/models/robot.js", "backend/models/company.js", "backend/controllers/users.js", "backend/controllers/company.js", "backend/controllers/robot.js", "backend/routes/robot.js", "backend/routes/company.js"],
   "exclude": ["node_modules"]
 }

@@ -29,12 +29,15 @@ const Company = () => {
                         <th>Company ID</th>
                         <th>Name</th>
                         <th>Address</th>
+                        <th>Robots</th>
                         <th>Actions</th>
                     </tr>
-                    <tr>
-                        <td></td>
-                        <td></td>
-                        <td></td>
+                    <tr className='text-center border'>
+                        <td>1</td>
+                        <td>Foodpanda</td>
+                        <td>63 Robinson Road, #11-01, Singapore 068894</td>
+                        <td>
+                          <a href="" className='underline'>1,25,26</a></td>
                         <td>
                             <div className=''>
                                 <button onClick={()=>setEdit(true)} className='p-2 m-2 rounded-md bg-blue-500 text-white text-sm'>Edit</button>
@@ -81,7 +84,7 @@ const Company = () => {
           {/* ADD ROBOT FORM  */}
           <form className='w-5/6 mx-auto'>
                 <div className='text-center text-lg font-bold py-2'>
-                  Robots
+                  Company
                 </div>
 
                 <div className="grid w-full items-center gap-2 my-2">
@@ -107,9 +110,7 @@ const Company = () => {
                     />
                   </div>
                 </div>
-
-
-                    
+   
                 <div className="flex justify-center">
                   <button
                     type="submit"
