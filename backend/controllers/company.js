@@ -13,21 +13,18 @@ const getCompany = async(req,res) => {
 
     // Check the validity of id 
     if (!mongoose.Types.ObjectId.isValid(id)){
-        return res.status(404).json({error: "No such workout"})
+        return res.status(404).json({error: "No such company"})
     }
-
     const company = await Company.findById(id)
 
-    if (!robot) {
-        return res.status(404).json({error: 'No such workout'})
+    if (!company) {
+        return res.status(404).json({error: 'No such company'})
     }
 }
 
 // POST a new company
 const createCompany = async(req,res) => {
     const {name,address} = req.body
-
-    // add doc to db 
     try {
         // Creating new document 
         const company = await Company.create({name,address}) 
@@ -40,40 +37,32 @@ const createCompany = async(req,res) => {
 // DELETE a company
 const deleteCompany = async (req,res) => {
     const {id} = req.params
-
     // Check the validity of id 
     if (!mongoose.Types.ObjectId.isValid(id)){
         return res.status(404).json({error: "No such workout"})
     }
-
     const company = await Company.findOneAndDelete({_id})
 
     if (!company) {
         return res.status(404).json({error: 'No such workout'})
     } 
-
     res.status(200).json(workout)
 }
 
 
 // UPDATE a robot 
 const updateCompany = async (req,res) => {
-
     const {id} = req.params
-
     // Check the validity of id 
     if (!mongoose.Types.ObjectId.isValid(id)){
-        return res.status(404).json({error: "No such workout"})
+        return res.status(404).json({error: "No such company"})
     }
-
     const company = await Company.findOneAndUpdate({_id:id}, {
         ...req.body 
     })
-
     if (!company) {
-        return res.status(404).json({error: 'No such workout'})
+        return res.status(404).json({error: 'No such company'})
     } 
-
     res.status(200).json(company)
 }
 

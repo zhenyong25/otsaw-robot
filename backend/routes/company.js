@@ -7,21 +7,26 @@ const {
     updateCompany
 } = require('../controllers/company')
 
+
+const requireAuth = require('../middleware/requireAuth')
 const router = express.Router()
+router.use(requireAuth)
+
+const { authRole } = require('../middleware/roleAuth')
 
 // GET all workouts
-router.get('/', getCompanies)
+router.get('/', authRole(), getCompanies)
 
 // GET a single workout
-router.get('/:id', getCompany)
+router.get('/:id', authRole(), getCompany)
 
 // POST a new workout
-router.post('/', createCompany)
+router.post('/', authRole(),createCompany)
 
 // DELETE a workout
-router.delete('/:id', deleteCompany)
+router.delete('/:id', authRole(),deleteCompany)
 
 // UPDATE a workout
-router.patch('/:id', updateCompany)
+router.patch('/:id', authRole(),updateCompany)
 
 module.exports = router

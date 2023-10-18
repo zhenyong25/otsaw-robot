@@ -10,42 +10,31 @@ const getRobots = async(req,res) => {
 // GET one robot 
 const getRobot = async(req,res) => {
     const {id} = req.params
-
     // Check the validity of id 
     if (!mongoose.Types.ObjectId.isValid(id)){
-        return res.status(404).json({error: "No such workout"})
+        return res.status(404).json({error: "No such robot"})
     }
-
     const robot = await Robot.findById(id)
-
     if (!robot) {
-        return res.status(404).json({error: 'No such workout'})
+        return res.status(404).json({error: 'No such robot'})
     }
 }
 
 // POST a new robot 
 const createRobot = async(req,res) => {
-
-    console.log(req.body)
-    const {name, model, manufacturingDt, status, currentLoc} = req.body
-
+    const {name, model, manufacturingDt, status, currentLoc, companyId} = req.body
     try {
         const robot = new Robot({
             name: name,
             model: model,
             manufacturingDt: manufacturingDt,
             status: status,
-            currentLoc: currentLoc
+            currentLoc: currentLoc,
+            companyId: companyId
           });
         
           const savedRobot = await robot.save();
-
-          console.log(savedRobot)
-          console.log(savedRobot.toObject())
-
-          res.header('Access-Control-Allow-Origin', '*');
           res.status(200).json(savedRobot.toObject());
-
     } catch (error){
         res.status(408).json({error: error.message})
     }
@@ -54,30 +43,24 @@ const createRobot = async(req,res) => {
 // DELETE a robot 
 const deleteRobot = async (req,res) => {
     const {id} = req.params
-
     // Check the validity of id 
     if (!mongoose.Types.ObjectId.isValid(id)){
-        return res.status(404).json({error: "No such workout"})
+        return res.status(404).json({error: "No such robot"})
     }
-
     const robot = await Robot.findOneAndDelete({_id})
-
     if (!robot) {
-        return res.status(404).json({error: 'No such workout'})
+        return res.status(404).json({error: 'No such robot'})
     } 
-
-    res.status(200).json(workout)
+    res.status(200).json(robot)
 }
 
 
 // UPDATE a robot 
 const updateRobot = async (req,res) => {
-
     const {id} = req.params
 
-    // Check the validity of id 
     if (!mongoose.Types.ObjectId.isValid(id)){
-        return res.status(404).json({error: "No such workout"})
+        return res.status(404).json({error: "No such robot"})
     }
 
     const robot = await Robot.findOneAndUpdate({_id:id}, {
@@ -85,10 +68,9 @@ const updateRobot = async (req,res) => {
     })
 
     if (!robot) {
-        return res.status(404).json({error: 'No such workout'})
+        return res.status(404).json({error: 'No such robot'})
     } 
-
-    res.status(200).json(workout)
+    res.status(200).json(robot)
 }
 
 module.exports = {
